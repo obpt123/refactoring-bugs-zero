@@ -1,26 +1,30 @@
 package cn.xpbootcamp.bugszero;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.*;
 
 public class Game {
+	private static final String[] CATEGORYS = new String[] { "Pop", "Science", "Sports", "Rock" };
+
 	List<Player> players = new ArrayList<Player>();
-
-	LinkedList popQuestions = new LinkedList();
-	LinkedList scienceQuestions = new LinkedList();
-	LinkedList sportsQuestions = new LinkedList();
-	LinkedList rockQuestions = new LinkedList();
-
+	Map<String, LinkedList<String>> questions = new HashMap<>();
 	int currentPlayerIndex = 0;
 
 	public Game() {
-		for (int i = 0; i < 50; i++) {
-			popQuestions.addLast(createQuestion("Pop" , i));
-			scienceQuestions.addLast(createQuestion("Science" , i));
-			sportsQuestions.addLast(createQuestion("Sports" , i));
-			rockQuestions.addLast(createQuestion("Rock", i));
-		}
+		initQuestions();
+	}
+
+	private void initQuestions() {
+		Stream.of(CATEGORYS).forEach((category) -> {
+			LinkedList<String> questionList = IntStream.range(0, 50)
+					.mapToObj((index) -> createQuestion(category, index))
+					.collect(Collectors.toCollection(LinkedList::new));
+			questions.put(category, questionList);
+		});
 	}
 
 	private String createQuestion(String category, int index) {
@@ -67,13 +71,13 @@ public class Game {
 
 	private void askQuestion() {
 		if (currentCategory() == "Pop")
-			logInfo(popQuestions.removeFirst());
+			logInfo(questions.get("Pop").removeFirst());
 		if (currentCategory() == "Science")
-			logInfo(scienceQuestions.removeFirst());
+			logInfo(questions.get("Science").removeFirst());
 		if (currentCategory() == "Sports")
-			logInfo(sportsQuestions.removeFirst());
+			logInfo(questions.get("Sports").removeFirst());
 		if (currentCategory() == "Rock")
-			logInfo(rockQuestions.removeFirst());
+			logInfo(questions.get("Rock").removeFirst());
 	}
 
 	private String currentCategory() {
