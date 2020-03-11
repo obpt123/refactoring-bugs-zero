@@ -18,19 +18,6 @@ public class Game {
 		initQuestions();
 	}
 
-	private void initQuestions() {
-		Stream.of(ALL_CATEGORIES).forEach((category) -> {
-			LinkedList<String> questionList = IntStream.range(0, 50)
-					.mapToObj((index) -> createQuestion(category, index))
-					.collect(Collectors.toCollection(LinkedList::new));
-			questions.put(category, questionList);
-		});
-	}
-
-	private String createQuestion(String category, int index) {
-		return String.format("%s Question %d", category, index);
-	}
-
 	public void add(String playerName) {
 		players.add(new Player(playerName));
 		logInfo(playerName + " was added");
@@ -59,6 +46,44 @@ public class Game {
 		return !currentPlayer().isInPenaltyBox();
 	}
 
+	public void setNextPlayer() {
+		currentPlayerIndex++;
+		if (currentPlayerIndex == players.size())
+			currentPlayerIndex = 0;
+	}
+
+	public boolean didPlayerWin() {
+		Player currentPlayer = currentPlayer();
+		return currentPlayer.getPurses() == 6;
+	}
+
+	public void wrongAnswer() {
+		Player currentPlayer = currentPlayer();
+		logInfo("Question was incorrectly answered");
+		logInfo(currentPlayer + " was sent to the penalty box");
+		currentPlayer.setInPenaltyBox(true);
+	}
+
+	public void wasCorrectlyAnswered() {
+		Player currentPlayer = currentPlayer();
+		logInfo("Answer was correct!!!!");
+		currentPlayer.setPurses(currentPlayer.getPurses() + 1);
+		logInfo(currentPlayer + " now has " + currentPlayer.getPurses() + " Gold Coins.");
+	}
+
+	private void initQuestions() {
+		Stream.of(ALL_CATEGORIES).forEach((category) -> {
+			LinkedList<String> questionList = IntStream.range(0, 50)
+					.mapToObj((index) -> createQuestion(category, index))
+					.collect(Collectors.toCollection(LinkedList::new));
+			questions.put(category, questionList);
+		});
+	}
+
+	private String createQuestion(String category, int index) {
+		return String.format("%s Question %d", category, index);
+	}
+
 	private void movePlayerAndAskQuestion(int roll) {
 		Player currentPlayer = currentPlayer();
 		currentPlayer.setPlace((currentPlayer.getPlace() + roll) % 12);
@@ -78,33 +103,8 @@ public class Game {
 		return ALL_CATEGORIES[currentPlayer.getPlace() % 4];
 	}
 
-	public void wasCorrectlyAnswered() {
-		Player currentPlayer = currentPlayer();
-		logInfo("Answer was correct!!!!");
-		currentPlayer.setPurses(currentPlayer.getPurses() + 1);
-		logInfo(currentPlayer + " now has " + currentPlayer.getPurses() + " Gold Coins.");
-	}
-
-	public void setNextPlayer() {
-		currentPlayerIndex++;
-		if (currentPlayerIndex == players.size())
-			currentPlayerIndex = 0;
-	}
-
 	private Player currentPlayer() {
 		return players.get(currentPlayerIndex);
-	}
-
-	public void wrongAnswer() {
-		Player currentPlayer = currentPlayer();
-		logInfo("Question was incorrectly answered");
-		logInfo(currentPlayer + " was sent to the penalty box");
-		currentPlayer.setInPenaltyBox(true);
-	}
-
-	public boolean didPlayerWin() {
-		Player currentPlayer = currentPlayer();
-		return currentPlayer.getPurses() == 6;
 	}
 
 	private void logInfo(Object message) {
