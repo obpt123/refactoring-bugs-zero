@@ -2,3 +2,9 @@
 .idea/
 build/
 out/
+.vscode/
+.project
+bin/
+.classpath
+.project
+.settings/
