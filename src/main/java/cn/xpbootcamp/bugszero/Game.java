@@ -70,38 +70,13 @@ public class Game {
 	}
 
 	private void askQuestion() {
-		if (currentCategory() == "Pop")
-			logInfo(questions.get("Pop").removeFirst());
-		if (currentCategory() == "Science")
-			logInfo(questions.get("Science").removeFirst());
-		if (currentCategory() == "Sports")
-			logInfo(questions.get("Sports").removeFirst());
-		if (currentCategory() == "Rock")
-			logInfo(questions.get("Rock").removeFirst());
+		String currentCategory = currentCategory();
+		logInfo(questions.get(currentCategory).removeFirst());
 	}
 
 	private String currentCategory() {
 		Player currentPlayer = currentPlayer();
-
-		if (currentPlayer.getPlace() == 0)
-			return "Pop";
-		if (currentPlayer.getPlace() == 4)
-			return "Pop";
-		if (currentPlayer.getPlace() == 8)
-			return "Pop";
-		if (currentPlayer.getPlace() == 1)
-			return "Science";
-		if (currentPlayer.getPlace() == 5)
-			return "Science";
-		if (currentPlayer.getPlace() == 9)
-			return "Science";
-		if (currentPlayer.getPlace() == 2)
-			return "Sports";
-		if (currentPlayer.getPlace() == 6)
-			return "Sports";
-		if (currentPlayer.getPlace() == 10)
-			return "Sports";
-		return "Rock";
+		return CATEGORYS[currentPlayer.getPlace() % 4];
 	}
 
 	public boolean wasCorrectlyAnswered() {
