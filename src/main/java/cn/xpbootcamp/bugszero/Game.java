@@ -47,9 +47,7 @@ public class Game {
 	}
 
 	public void setNextPlayer() {
-		currentPlayerIndex++;
-		if (currentPlayerIndex == players.size())
-			currentPlayerIndex = 0;
+		currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
 	}
 
 	public boolean didPlayerWin() {
