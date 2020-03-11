@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class Game {
 	List<Player> players = new ArrayList<Player>();
 
@@ -17,15 +16,15 @@ public class Game {
 
 	public Game() {
 		for (int i = 0; i < 50; i++) {
-			popQuestions.addLast("Pop Question " + i);
-			scienceQuestions.addLast(("Science Question " + i));
-			sportsQuestions.addLast(("Sports Question " + i));
-			rockQuestions.addLast(createRockQuestion(i));
+			popQuestions.addLast(createQuestion("Pop" , i));
+			scienceQuestions.addLast(createQuestion("Science" , i));
+			sportsQuestions.addLast(createQuestion("Sports" , i));
+			rockQuestions.addLast(createQuestion("Rock", i));
 		}
 	}
 
-	public String createRockQuestion(int index) {
-		return "Rock Question " + index;
+	private String createQuestion(String category, int index) {
+		return String.format("%s Question %d", category, index);
 	}
 
 	public boolean add(String playerName) {
@@ -48,7 +47,6 @@ public class Game {
 			} else {
 				logInfo(currentPlayer + " is not getting out of the penalty box");
 			}
-
 		} else {
 			movePlayerAndAskQuestion(roll);
 		}
