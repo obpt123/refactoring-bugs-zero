@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.*;
 
 public class Game {
-	private static final String[] CATEGORYS = new String[] { "Pop", "Science", "Sports", "Rock" };
+	private static final String[] ALL_CATEGORIES = new String[] { "Pop", "Science", "Sports", "Rock" };
 
 	List<Player> players = new ArrayList<Player>();
 	Map<String, LinkedList<String>> questions = new HashMap<>();
@@ -19,7 +19,7 @@ public class Game {
 	}
 
 	private void initQuestions() {
-		Stream.of(CATEGORYS).forEach((category) -> {
+		Stream.of(ALL_CATEGORIES).forEach((category) -> {
 			LinkedList<String> questionList = IntStream.range(0, 50)
 					.mapToObj((index) -> createQuestion(category, index))
 					.collect(Collectors.toCollection(LinkedList::new));
@@ -31,11 +31,10 @@ public class Game {
 		return String.format("%s Question %d", category, index);
 	}
 
-	public boolean add(String playerName) {
+	public void add(String playerName) {
 		players.add(new Player(playerName));
 		logInfo(playerName + " was added");
 		logInfo("They are player number " + players.size());
-		return true;
 	}
 
 	public void roll(int roll) {
@@ -76,18 +75,14 @@ public class Game {
 
 	private String currentCategory() {
 		Player currentPlayer = currentPlayer();
-		return CATEGORYS[currentPlayer.getPlace() % 4];
+		return ALL_CATEGORIES[currentPlayer.getPlace() % 4];
 	}
 
-	public boolean wasCorrectlyAnswered() {
+	public void wasCorrectlyAnswered() {
 		Player currentPlayer = currentPlayer();
 		logInfo("Answer was correct!!!!");
 		currentPlayer.setPurses(currentPlayer.getPurses() + 1);
 		logInfo(currentPlayer + " now has " + currentPlayer.getPurses() + " Gold Coins.");
-
-		boolean winner = didPlayerWin();
-		return winner;
-
 	}
 
 	public void setNextPlayer() {
@@ -100,17 +95,16 @@ public class Game {
 		return players.get(currentPlayerIndex);
 	}
 
-	public boolean wrongAnswer() {
+	public void wrongAnswer() {
 		Player currentPlayer = currentPlayer();
 		logInfo("Question was incorrectly answered");
 		logInfo(currentPlayer + " was sent to the penalty box");
 		currentPlayer.setInPenaltyBox(true);
-		return true;
 	}
 
-	private boolean didPlayerWin() {
+	public boolean didPlayerWin() {
 		Player currentPlayer = currentPlayer();
-		return !(currentPlayer.getPurses() == 6);
+		return currentPlayer.getPurses() == 6;
 	}
 
 	private void logInfo(Object message) {
