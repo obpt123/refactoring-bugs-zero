@@ -28,20 +28,11 @@ public class Game {
 		return "Rock Question " + index;
 	}
 
-	public boolean isPlayable() {
-		return (howManyPlayers() >= 2);
-	}
-
 	public boolean add(String playerName) {
 		players.add(new Player(playerName));
-
 		logInfo(playerName + " was added");
 		logInfo("They are player number " + players.size());
 		return true;
-	}
-
-	public int howManyPlayers() {
-		return players.size();
 	}
 
 	public void roll(int roll) {
