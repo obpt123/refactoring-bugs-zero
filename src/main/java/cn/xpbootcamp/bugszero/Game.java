@@ -3,6 +3,8 @@ package cn.xpbootcamp.bugszero;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import com.google.j2objc.annotations.RetainedLocalRef;
+
 public class Game {
     ArrayList players = new ArrayList();
     int[] places = new int[6];
@@ -60,6 +62,7 @@ public class Game {
 				isGettingOutOfPenaltyBox = true;
 
 				System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
+				inPenaltyBox[currentPlayer] = false;
 				movePlayerAndAskQuestion(roll);
 			} else {
 				System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
@@ -71,6 +74,9 @@ public class Game {
 			movePlayerAndAskQuestion(roll);
 		}
 
+	}
+	public boolean canAnswer(){
+		return !inPenaltyBox[currentPlayer];
 	}
 
 	private void movePlayerAndAskQuestion(int roll) {
@@ -113,8 +119,6 @@ public class Game {
 		if (inPenaltyBox[currentPlayer]){
 			if (isGettingOutOfPenaltyBox) {
 				System.out.println("Answer was correct!!!!");
-				currentPlayer++;
-				if (currentPlayer == players.size()) currentPlayer = 0;
 				purses[currentPlayer]++;
 				System.out.println(players.get(currentPlayer)
 						+ " now has "
@@ -125,8 +129,6 @@ public class Game {
 
 				return winner;
 			} else {
-				currentPlayer++;
-				if (currentPlayer == players.size()) currentPlayer = 0;
 				return true;
 			}
 
@@ -134,7 +136,7 @@ public class Game {
 
 		} else {
 
-			System.out.println("Answer was corrent!!!!");
+			System.out.println("Answer was correct!!!!");
 			purses[currentPlayer]++;
 			System.out.println(players.get(currentPlayer)
 					+ " now has "
@@ -142,11 +144,14 @@ public class Game {
 					+ " Gold Coins.");
 
 			boolean winner = didPlayerWin();
-			currentPlayer++;
-			if (currentPlayer == players.size()) currentPlayer = 0;
 
 			return winner;
 		}
+	}
+
+	public void setNextPlayer() {
+		currentPlayer++;
+		if (currentPlayer == players.size()) currentPlayer = 0;
 	}
 
 	public boolean wrongAnswer(){
@@ -154,8 +159,6 @@ public class Game {
 		System.out.println(players.get(currentPlayer)+ " was sent to the penalty box");
 		inPenaltyBox[currentPlayer] = true;
 
-		currentPlayer++;
-		if (currentPlayer == players.size()) currentPlayer = 0;
 		return true;
 	}
 
