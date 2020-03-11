@@ -22,7 +22,7 @@ public class GameRunner {
 
 		do {
 
-			aGame.roll(rand.nextInt(5) + 1);
+			aGame.roll(rand.nextInt(6) + 1);
 			if(aGame.canAnswer()){
 				if (rand.nextInt(9) == 7) {
 					notAWinner = aGame.wrongAnswer();
