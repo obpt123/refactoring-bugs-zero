@@ -18,6 +18,11 @@ public class Game {
 		initQuestions();
 	}
 
+	public Game(String... players) {
+		this();
+		Stream.of(players).forEach(this::addPlayer);
+	}
+
 	public void addPlayer(String playerName) {
 		players.add(new Player(playerName));
 		logInfo("%s was added", playerName);
