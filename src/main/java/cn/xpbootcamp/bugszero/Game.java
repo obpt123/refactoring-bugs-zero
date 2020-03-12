@@ -10,13 +10,15 @@ import java.util.stream.*;
 public class Game {
 	private static final String[] ALL_CATEGORIES = new String[] { "Pop", "Science", "Sports", "Rock" };
 	private static final int TOTAL_PLACES_COUNT = 12;
-	
+
 	List<Player> players = new ArrayList<Player>();
-	Map<String, LinkedList<String>> questions = new HashMap<>();
+	Map<String, QuestionPool> questions = new HashMap<>();
 	int currentPlayerIndex = 0;
 
 	public Game() {
-		initQuestions();
+		Stream.of(ALL_CATEGORIES).forEach((category) -> {
+			questions.put(category, new QuestionPool(category, 50));
+		});
 	}
 
 	public Game(String... players) {
@@ -76,15 +78,6 @@ public class Game {
 		logInfo("%s now has %d Gold Coins.", currentPlayer, currentPlayer.getPurses());
 	}
 
-	private void initQuestions() {
-		Stream.of(ALL_CATEGORIES).forEach((category) -> {
-			LinkedList<String> questionList = IntStream.range(0, 50)
-					.mapToObj(index -> String.format("%s Question %d", category, index))
-					.collect(Collectors.toCollection(LinkedList::new));
-			questions.put(category, questionList);
-		});
-	}
-
 	private void movePlayerPlace(int roll) {
 		Player currentPlayer = currentPlayer();
 		currentPlayer.setPlace((currentPlayer.getPlace() + roll) % TOTAL_PLACES_COUNT);
@@ -94,7 +87,7 @@ public class Game {
 	private void askQuestion() {
 		String currentCategory = currentCategory();
 		logInfo("The category is %s", currentCategory);
-		logInfo(questions.get(currentCategory).removeFirst());
+		logInfo(questions.get(currentCategory).getNewQuestion());
 	}
 
 	private String currentCategory() {
