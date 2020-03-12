@@ -28,17 +28,18 @@ public class Game {
 		Player currentPlayer = currentPlayer();
 		logInfo("%s is the current player", currentPlayer);
 		logInfo("They have rolled a %d", roll);
-
 		if (currentPlayer.isInPenaltyBox()) {
 			if (roll % 2 != 0) {
 				logInfo("%s is getting out of the penalty box", currentPlayer);
 				currentPlayer.setInPenaltyBox(false);
-				movePlayerAndAskQuestion(roll);
+				movePlayerPlace(roll);
+				askQuestion();
 			} else {
 				logInfo("%s is not getting out of the penalty box", currentPlayer);
 			}
 		} else {
-			movePlayerAndAskQuestion(roll);
+			movePlayerPlace(roll);
+			askQuestion();
 		}
 	}
 
@@ -72,27 +73,21 @@ public class Game {
 	private void initQuestions() {
 		Stream.of(ALL_CATEGORIES).forEach((category) -> {
 			LinkedList<String> questionList = IntStream.range(0, 50)
-					.mapToObj((index) -> createQuestion(category, index))
+					.mapToObj((index) -> String.format("%s Question %d", category, index))
 					.collect(Collectors.toCollection(LinkedList::new));
 			questions.put(category, questionList);
 		});
 	}
 
-	private String createQuestion(String category, int index) {
-		return String.format("%s Question %d", category, index);
-	}
-
-	private void movePlayerAndAskQuestion(int roll) {
+	private void movePlayerPlace(int roll) {
 		Player currentPlayer = currentPlayer();
 		currentPlayer.setPlace((currentPlayer.getPlace() + roll) % 12);
-
 		logInfo("%s's new location is %d", currentPlayer, currentPlayer.getPlace());
-		logInfo("The category is %s", currentCategory());
-		askQuestion();
 	}
 
 	private void askQuestion() {
 		String currentCategory = currentCategory();
+		logInfo("The category is %s", currentCategory);
 		logInfo(questions.get(currentCategory).removeFirst());
 	}
 
