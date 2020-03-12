@@ -20,22 +20,22 @@ public class Game {
 
 	public void add(String playerName) {
 		players.add(new Player(playerName));
-		logInfo(playerName + " was added");
-		logInfo("They are player number " + players.size());
+		logInfo("%s was added", playerName);
+		logInfo("They are player number %d", players.size());
 	}
 
 	public void roll(int roll) {
 		Player currentPlayer = currentPlayer();
-		logInfo(currentPlayer + " is the current player");
-		logInfo("They have rolled a " + roll);
+		logInfo("%s is the current player", currentPlayer);
+		logInfo("They have rolled a %d", roll);
 
 		if (currentPlayer.isInPenaltyBox()) {
 			if (roll % 2 != 0) {
-				logInfo(currentPlayer + " is getting out of the penalty box");
+				logInfo("%s is getting out of the penalty box", currentPlayer);
 				currentPlayer.setInPenaltyBox(false);
 				movePlayerAndAskQuestion(roll);
 			} else {
-				logInfo(currentPlayer + " is not getting out of the penalty box");
+				logInfo("%s is not getting out of the penalty box", currentPlayer);
 			}
 		} else {
 			movePlayerAndAskQuestion(roll);
@@ -58,7 +58,7 @@ public class Game {
 	public void wrongAnswer() {
 		Player currentPlayer = currentPlayer();
 		logInfo("Question was incorrectly answered");
-		logInfo(currentPlayer + " was sent to the penalty box");
+		logInfo("%s was sent to the penalty box", currentPlayer);
 		currentPlayer.setInPenaltyBox(true);
 	}
 
@@ -66,7 +66,7 @@ public class Game {
 		Player currentPlayer = currentPlayer();
 		logInfo("Answer was correct!!!!");
 		currentPlayer.setPurses(currentPlayer.getPurses() + 1);
-		logInfo(currentPlayer + " now has " + currentPlayer.getPurses() + " Gold Coins.");
+		logInfo("%s now has %d Gold Coins.", currentPlayer, currentPlayer.getPurses());
 	}
 
 	private void initQuestions() {
@@ -86,8 +86,8 @@ public class Game {
 		Player currentPlayer = currentPlayer();
 		currentPlayer.setPlace((currentPlayer.getPlace() + roll) % 12);
 
-		logInfo(currentPlayer + "'s new location is " + currentPlayer.getPlace());
-		logInfo("The category is " + currentCategory());
+		logInfo("%s's new location is %d", currentPlayer, currentPlayer.getPlace());
+		logInfo("The category is %s", currentCategory());
 		askQuestion();
 	}
 
@@ -105,7 +105,7 @@ public class Game {
 		return players.get(currentPlayerIndex);
 	}
 
-	private void logInfo(Object message) {
-		System.out.println(message);
+	private void logInfo(String messageFormat, Object... args) {
+		System.out.println(String.format(messageFormat, args));
 	}
 }
