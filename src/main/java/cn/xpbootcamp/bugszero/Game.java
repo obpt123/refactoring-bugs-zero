@@ -9,7 +9,8 @@ import java.util.stream.*;
 
 public class Game {
 	private static final String[] ALL_CATEGORIES = new String[] { "Pop", "Science", "Sports", "Rock" };
-
+	private static final int TOTAL_PLACES_COUNT = 12;
+	
 	List<Player> players = new ArrayList<Player>();
 	Map<String, LinkedList<String>> questions = new HashMap<>();
 	int currentPlayerIndex = 0;
@@ -78,7 +79,7 @@ public class Game {
 	private void initQuestions() {
 		Stream.of(ALL_CATEGORIES).forEach((category) -> {
 			LinkedList<String> questionList = IntStream.range(0, 50)
-					.mapToObj((index) -> String.format("%s Question %d", category, index))
+					.mapToObj(index -> String.format("%s Question %d", category, index))
 					.collect(Collectors.toCollection(LinkedList::new));
 			questions.put(category, questionList);
 		});
@@ -86,7 +87,7 @@ public class Game {
 
 	private void movePlayerPlace(int roll) {
 		Player currentPlayer = currentPlayer();
-		currentPlayer.setPlace((currentPlayer.getPlace() + roll) % 12);
+		currentPlayer.setPlace((currentPlayer.getPlace() + roll) % TOTAL_PLACES_COUNT);
 		logInfo("%s's new location is %d", currentPlayer, currentPlayer.getPlace());
 	}
 
@@ -98,7 +99,7 @@ public class Game {
 
 	private String currentCategory() {
 		Player currentPlayer = currentPlayer();
-		return ALL_CATEGORIES[currentPlayer.getPlace() % 4];
+		return ALL_CATEGORIES[currentPlayer.getPlace() % ALL_CATEGORIES.length];
 	}
 
 	private Player currentPlayer() {
