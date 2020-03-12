@@ -18,7 +18,7 @@ public class Game {
 		initQuestions();
 	}
 
-	public void add(String playerName) {
+	public void addPlayer(String playerName) {
 		players.add(new Player(playerName));
 		logInfo("%s was added", playerName);
 		logInfo("They are player number %d", players.size());
@@ -62,7 +62,7 @@ public class Game {
 		currentPlayer.setInPenaltyBox(true);
 	}
 
-	public void wasCorrectlyAnswered() {
+	public void correctAnswer() {
 		Player currentPlayer = currentPlayer();
 		logInfo("Answer was correct!!!!");
 		currentPlayer.setPurses(currentPlayer.getPurses() + 1);
